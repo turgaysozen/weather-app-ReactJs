@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "weather-icons/css/weather-icons.css"
 
 const API_Key = '88b994d7810fe07a56efbb3b7cbfb7ec';
-// api call : api.openweathermap.org/data/2.5/weather?q=London
 
 class App extends React.Component {
   constructor() {
@@ -70,10 +69,6 @@ class App extends React.Component {
       desc: res.weather[0].description,
     });
     this.getIcon(this.icon, res.weather[0].id);
-    
-    console.log(res.weather[0].id);
-    console.log(res);
-
   }
 
   render() {
