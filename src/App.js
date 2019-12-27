@@ -3,6 +3,7 @@ import './App.css';
 import Weather from "../src/Components/Weather";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "weather-icons/css/weather-icons.css"
+import Form from "../src/Components/FormComponent"
 
 const API_Key = '88b994d7810fe07a56efbb3b7cbfb7ec';
 
@@ -16,8 +17,8 @@ class App extends React.Component {
       tempMin: '',
       tempMax: '',
       desc: '',
+      error: false,
     }
-    this.getWeather();
     this.icon = {
       Thunderstorm: 'wi-thunderstorm',
       Drizzle: 'wi-sleet',
@@ -57,23 +58,37 @@ class App extends React.Component {
     }
   }
 
-  getWeather = async () => {
-    const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=moscow&appid=${API_Key}&units=metric`);
-    const res = await api_call.json();
-    this.setState({
-      city: res.name,
-      country: res.sys.country,
-      temp: res.main.temp,
-      tempMax: res.main.temp_max,
-      tempMin: res.main.temp_min,
-      desc: res.weather[0].description,
-    });
-    this.getIcon(this.icon, res.weather[0].id);
+  getWeather = async (e) => {
+    e.preventDefault();
+
+    const city = e.target.elements.city.value;
+    const country = e.target.elements.country.value;
+
+    if (city !== '' && country !== '') {
+      const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_Key}&units=metric`);
+
+      const res = await api_call.json();
+      this.setState({
+        city: res.name,
+        country: res.sys.country,
+        temp: parseFloat(res.main.temp.toFixed(1)),
+        tempMax: parseFloat(res.main.temp_max.toFixed(1)),
+        tempMin: parseFloat(res.main.temp_min.toFixed(1)),
+        desc: res.weather[0].description,
+        error: false,
+      });
+      this.getIcon(this.icon, res.weather[0].id);
+    }
+    else {
+      this.setState({ error: true });
+    }
   }
 
   render() {
     return (
+
       <div className="App">
+        <Form loadweather={this.getWeather} error={this.state.error} />
         <Weather
           city={this.state.city}
           country={this.state.country}
