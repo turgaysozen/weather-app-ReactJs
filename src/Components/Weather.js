@@ -1,8 +1,10 @@
-import React from "react"
+import React from "react";
+import "./form.css"
+
 
 const Weather = props => {
     return (
-        <div className="container text-light">
+        <div className="text-light">
           {props.city !== '' ? isEmpty(props) : ''}
         </div>
     )

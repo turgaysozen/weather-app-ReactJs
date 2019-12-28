@@ -18,6 +18,7 @@ class App extends React.Component {
       tempMax: '',
       desc: '',
       error: false,
+      errNotFound: false,
     }
     this.icon = {
       Thunderstorm: 'wi-thunderstorm',
@@ -68,16 +69,23 @@ class App extends React.Component {
       const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_Key}&units=metric`);
 
       const res = await api_call.json();
-      this.setState({
-        city: res.name,
-        country: res.sys.country,
-        temp: parseFloat(res.main.temp.toFixed(1)),
-        tempMax: parseFloat(res.main.temp_max.toFixed(1)),
-        tempMin: parseFloat(res.main.temp_min.toFixed(1)),
-        desc: res.weather[0].description,
-        error: false,
-      });
-      this.getIcon(this.icon, res.weather[0].id);
+      console.log(res)
+      if (res.cod !== '404') {
+        this.setState({
+          city: res.name,
+          country: res.sys.country,
+          temp: parseFloat(res.main.temp.toFixed(1)),
+          tempMax: parseFloat(res.main.temp_max.toFixed(1)),
+          tempMin: parseFloat(res.main.temp_min.toFixed(1)),
+          desc: res.weather[0].description,
+          error: false,
+          errNotFound: false,
+        });
+        this.getIcon(this.icon, res.weather[0].id);
+      }
+      else {
+        this.setState({ errNotFound: true, error: false });
+      }
     }
     else {
       this.setState({ error: true });
@@ -88,7 +96,7 @@ class App extends React.Component {
     return (
 
       <div className="App">
-        <Form loadweather={this.getWeather} error={this.state.error} />
+        <Form loadweather={this.getWeather} error={this.state.error} errNotFound={this.state.errNotFound} />
         <Weather
           city={this.state.city}
           country={this.state.country}
