@@ -4,13 +4,13 @@ import Weather from "../src/Components/Weather";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "weather-icons/css/weather-icons.css"
 import Form from "../src/Components/FormComponent"
+require('dotenv').config()
 
-const API_Key = '88b994d7810fe07a56efbb3b7cbfb7ec';
+const API_Key = process.env.REACT_APP_API_KEY;
 
 class App extends React.Component {
-  constructor() {
-    super()
-    this.state = {
+    
+  state = {
       city: '',
       country: '',
       temp: '',
@@ -20,7 +20,7 @@ class App extends React.Component {
       error: false,
       errNotFound: false,
     }
-    this.icon = {
+    icon = {
       Thunderstorm: 'wi-thunderstorm',
       Drizzle: 'wi-sleet',
       Rain: 'wi-storm-showers',
@@ -29,7 +29,6 @@ class App extends React.Component {
       Clear: 'wi-day-sunny',
       Clouds: 'wi-day-fog',
     }
-  }
 
   getIcon(icons, rangeId) {
     switch (true) {
@@ -67,7 +66,6 @@ class App extends React.Component {
 
     if (city !== '' && country !== '') {
       const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_Key}&units=metric`);
-
       const res = await api_call.json();
       console.log(res)
       if (res.cod !== '404') {

@@ -1,7 +1,6 @@
 import React from "react";
 import "./form.css"
 
-
 const Weather = props => {
     return (
         <div className="text-light">
