@@ -57,7 +57,7 @@ class App extends React.Component {
         this.setState({ icon: icons.Clouds });
     }
   }
-
+ 
   getWeather = async (e) => {
     e.preventDefault();
 
